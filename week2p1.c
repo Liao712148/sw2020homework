@@ -37,11 +37,29 @@ bool is_ascii(const char str[],size_t size)
     return true;
 }
 
+bool is_ascii2(const char str[],size_t size)
+{
+    if (size == 0)
+            return false;
+    int i;
+    while ((i+8) <= size) {
+        uint64_t *temp = (uint64_t *) str;/*cast char* into uint64_t* */ 
+        if (*temp & 0x8080808080808080)
+                return false;
+        i += 8;
+    }
+    while (i < size) {
+        if (str[i] & 0x80)
+            return false;
+        i++;
+
+    }
+    return true;
+}
 
 int main()
 {
-    char a[] = "abcdefghijk";
-    int i;
-    i = is_ascii1(a,-1);
-    printf("%d\n",i);
+    char a[] = "ABCDEFGHIJKL";
+    is_ascii2(a+1,strlen(a)-1);//if we cast char* into uint64_t which maybe product alignment fault!!!
+
 }
