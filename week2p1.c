@@ -23,7 +23,7 @@ bool is_ascii(const char str[],size_t size)
     int i;
     while ((i+8) <= size) {
         uint64_t temp; /*using a bigger type to store char of str,rather than declare an array*/
-	memcpy(temp,str[i],8);
+	memcpy(&temp,str[i],8);
 	if (temp & 0x8080808080808080)
 		return false;
 	i += 8;
