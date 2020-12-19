@@ -22,11 +22,35 @@ uint64_t hexstring2val(const char str[])
     return result;
     
 }
+uint64_t hexstring2val_big_LITTLE(const char str[])
+{
+    int len = strlen(str);
+    uint64_t result = 0;
+    assert(str[0] == '0' && (str[1] == 'x' || str[1] == 'X'));
+    int i = 1;
+    char *c = (char *) & i;
+    if (*c) {
+        for (int i = 2;i < len; i++) {
+            uint64_t letter = str[i] & 0x40;
+            uint64_t shift = (letter >> 3) | (letter >> 6);
+            result = result << 4 | ((str[i] + shift) & 0xf);
+        }
+    } else {
+        for (int i = 2;i < len; i++) {
+            uint64_t letter = str[i] & 0x40;
+            uint64_t shift = (letter >> 3) | (letter >> 6);
+            result = result  | ((str[i] + shift) & 0xf) << (4 * (i - 2));
+        }
+    }
+    return result;
 
+}
 int main()
 {
 	char a[] = "0xDEADBEAF";
 	printf("%ld \n",hexstring2val(a));
+	printf("%x \n",hexstring2val(a));
+
 	return 0;
 }
 
